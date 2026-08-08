@@ -4,15 +4,15 @@ static Window *s_main_window;
 static TextLayer *s_time_layer;
 static TextLayer *s_date_layer;
 
-static void update_time() {
+static void update_time()
+{
   // Get a tm structure
   time_t temp = time(NULL);
   struct tm *tick_time = localtime(&temp);
 
   // Write the current hours and minutes into a buffer
   static char s_time_buffer[8];
-  strftime(s_time_buffer, sizeof(s_time_buffer), clock_is_24h_style() ?
-                                                    "%H:%M" : "%I:%M", tick_time);
+  strftime(s_time_buffer, sizeof(s_time_buffer), clock_is_24h_style() ? "%H:%M" : "%I:%M", tick_time);
 
   // Display this time on the TextLayer
   text_layer_set_text(s_time_layer, s_time_buffer);
@@ -25,11 +25,13 @@ static void update_time() {
   text_layer_set_text(s_date_layer, s_date_buffer);
 }
 
-static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
+static void tick_handler(struct tm *tick_time, TimeUnits units_changed)
+{
   update_time();
 }
 
-static void main_window_load(Window *window) {
+static void main_window_load(Window *window)
+{
   // Get information about the Window
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
@@ -55,13 +57,15 @@ static void main_window_load(Window *window) {
   layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
 }
 
-static void main_window_unload(Window *window) {
+static void main_window_unload(Window *window)
+{
   // Destroy TextLayers
   text_layer_destroy(s_time_layer);
   text_layer_destroy(s_date_layer);
 }
 
-static void init() {
+static void init()
+{
   // Create main Window element and assign to pointer
   s_main_window = window_create();
 
@@ -69,10 +73,9 @@ static void init() {
   window_set_background_color(s_main_window, GColorBlack);
 
   // Set handlers to manage the elements inside the Window
-  window_set_window_handlers(s_main_window, (WindowHandlers) {
-    .load = main_window_load,
-    .unload = main_window_unload
-  });
+  window_set_window_handlers(s_main_window, (WindowHandlers){
+                                                .load = main_window_load,
+                                                .unload = main_window_unload});
 
   // Show the Window on the watch, with animated=true
   window_stack_push(s_main_window, true);
@@ -84,12 +87,14 @@ static void init() {
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 }
 
-static void deinit() {
+static void deinit()
+{
   // Destroy Window
   window_destroy(s_main_window);
 }
 
-int main(void) {
+int main(void)
+{
   init();
   app_event_loop();
   deinit();
