@@ -34,10 +34,10 @@
                 },
                 {
                     "file": "images/menu",
+                    "menuIcon": true,
                     "name": "MENU_ICON",
                     "targetPlatforms": null,
-                    "type": "bitmap",
-                    "menuIcon": true
+                    "type": "bitmap"
                 },
                 {
                     "characterRegex": "[0-9:. ]",
@@ -78,5 +78,5 @@
             "watchface": true
         }
     },
-    "version": "1.0.0"
+    "version": "1.0.1"
 }
