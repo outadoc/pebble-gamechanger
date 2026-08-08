@@ -16,28 +16,51 @@
                     "characterRegex": "[0-9:APM ]",
                     "file": "fonts/MouseMemoirs-Regular.ttf",
                     "name": "MOUSEMEMOIRS_58",
-                    "targetPlatforms": ["emery", "gabbro"],
+                    "targetPlatforms": [
+                        "emery",
+                        "gabbro"
+                    ],
                     "type": "font"
                 },
                 {
                     "characterRegex": "[0-9:APM ]",
                     "file": "fonts/MouseMemoirs-Regular.ttf",
                     "name": "MOUSEMEMOIRS_46",
-                    "targetPlatforms": ["basalt", "chalk"],
+                    "targetPlatforms": [
+                        "basalt",
+                        "chalk"
+                    ],
                     "type": "font"
                 },
                 {
-                    "characterRegex": null,
+                    "file": "images/menu",
+                    "name": "MENU_ICON",
+                    "targetPlatforms": null,
+                    "type": "bitmap"
+                },
+                {
+                    "characterRegex": "[0-9:. ]",
+                    "file": "fonts/trade-gothic-lt-std-bold-condensed-no-20-5872def1d27d8.otf",
+                    "name": "TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_24",
+                    "targetPlatforms": null,
+                    "type": "font"
+                },
+                {
                     "file": "fonts/trade-gothic-lt-std-bold-condensed-no-20-5872def1d27d8.otf",
                     "name": "TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_23",
-                    "targetPlatforms": ["emery", "gabbro"],
+                    "targetPlatforms": [
+                        "emery",
+                        "gabbro"
+                    ],
                     "type": "font"
                 },
                 {
-                    "characterRegex": null,
                     "file": "fonts/trade-gothic-lt-std-bold-condensed-no-20-5872def1d27d8.otf",
                     "name": "TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_18",
-                    "targetPlatforms": ["basalt", "chalk"],
+                    "targetPlatforms": [
+                        "basalt",
+                        "chalk"
+                    ],
                     "type": "font"
                 }
             ]
