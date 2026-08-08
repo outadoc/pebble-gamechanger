@@ -1,6 +1,10 @@
 #include <pebble.h>
 
 #define NUM_STRIPES 8
+#define ROUNDRECT_WIDTH 180
+#define ROUNDRECT_HEIGHT (ROUNDRECT_WIDTH * 10 / 16)
+#define ROUNDRECT_RADIUS_OUTER 15
+#define ROUNDRECT_RADIUS_INNER 10
 
 static const GColor STRIPE_COLORS[] = {
     GColorRed,
@@ -57,6 +61,24 @@ static void background_update_proc(Layer *layer, GContext *ctx)
     graphics_context_set_fill_color(ctx, STRIPE_COLORS[i % NUM_STRIPE_COLORS]);
     graphics_fill_rect(ctx, GRect(bounds.origin.x, bounds.origin.y + stripe_height * i, bounds.size.w, height), 0, GCornerNone);
   }
+
+  // Draw a black roundrect centered on the screen
+  GRect roundrect_bounds = GRect(
+      bounds.origin.x + (bounds.size.w - ROUNDRECT_WIDTH) / 2,
+      bounds.origin.y + (bounds.size.h - ROUNDRECT_HEIGHT) / 2,
+      ROUNDRECT_WIDTH,
+      ROUNDRECT_HEIGHT);
+  graphics_context_set_fill_color(ctx, GColorBlack);
+  graphics_fill_rect(ctx, roundrect_bounds, ROUNDRECT_RADIUS_OUTER, GCornersAll);
+
+  // Draw a white roundrect on top of it
+  GRect roundrect2_bounds = GRect(
+      bounds.origin.x + (bounds.size.w - (ROUNDRECT_WIDTH - 15)) / 2,
+      bounds.origin.y + (bounds.size.h - (ROUNDRECT_HEIGHT - 15)) / 2,
+      (ROUNDRECT_WIDTH - 15),
+      (ROUNDRECT_HEIGHT - 15));
+  graphics_context_set_fill_color(ctx, GColorWhite);
+  graphics_fill_rect(ctx, roundrect2_bounds, ROUNDRECT_RADIUS_INNER, GCornersAll);
 }
 
 static void main_window_load(Window *window)
@@ -78,7 +100,7 @@ static void main_window_load(Window *window)
   s_time_layer = text_layer_create(
       GRect(0, PBL_IF_ROUND_ELSE(58, 52), bounds.size.w, 50));
   text_layer_set_background_color(s_time_layer, GColorClear);
-  text_layer_set_text_color(s_time_layer, GColorWhite);
+  text_layer_set_text_color(s_time_layer, GColorBlack);
   text_layer_set_font(s_time_layer, s_title_font);
   text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
 
@@ -86,7 +108,7 @@ static void main_window_load(Window *window)
   s_date_layer = text_layer_create(
       GRect(0, PBL_IF_ROUND_ELSE(110, 104), bounds.size.w, 30));
   text_layer_set_background_color(s_date_layer, GColorClear);
-  text_layer_set_text_color(s_date_layer, GColorWhite);
+  text_layer_set_text_color(s_date_layer, GColorBlack);
   text_layer_set_font(s_date_layer, s_body_font);
   text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
 
