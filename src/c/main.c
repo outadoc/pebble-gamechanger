@@ -4,7 +4,7 @@
 // Basalt and Chalk have noticeably smaller screens than Emery/Gabbro, so every
 // size constant below gets a smaller value for them instead of scaling off the window
 #if defined(PBL_PLATFORM_BASALT) || defined(PBL_PLATFORM_CHALK)
-  #define DEVICE_IS_SMALL
+#define DEVICE_IS_SMALL
 #endif
 
 // Striped background
@@ -14,29 +14,29 @@
 #define ROUNDRECT_SIZE_RATIO 0.7
 
 #ifdef DEVICE_IS_SMALL
-  #define ROUNDRECT_WIDTH 130
-  #define ROUNDRECT_RADIUS_OUTER 18
-  #define ROUNDRECT_RADIUS_INNER 14
-  #define ROUNDRECT_BORDER_WIDTH 14
+#define ROUNDRECT_WIDTH 130
+#define ROUNDRECT_RADIUS_OUTER 18
+#define ROUNDRECT_RADIUS_INNER 14
+#define ROUNDRECT_BORDER_WIDTH 14
 #else
-  #define ROUNDRECT_WIDTH 180
-  #define ROUNDRECT_RADIUS_OUTER 25
-  #define ROUNDRECT_RADIUS_INNER 20
-  #define ROUNDRECT_BORDER_WIDTH 20
+#define ROUNDRECT_WIDTH 180
+#define ROUNDRECT_RADIUS_OUTER 25
+#define ROUNDRECT_RADIUS_INNER 20
+#define ROUNDRECT_BORDER_WIDTH 20
 #endif
 
 #define ROUNDRECT_HEIGHT (ROUNDRECT_WIDTH * ROUNDRECT_SIZE_RATIO)
 
 // Time + date text layers (centered as a group)
 #ifdef DEVICE_IS_SMALL
-  #define TIME_LAYER_HEIGHT 46
-  #define DATE_LAYER_HEIGHT 22
-  // Nudges the group up slightly to compensate for the time font's line-height
-  #define GROUP_VERTICAL_OFFSET -3
+#define TIME_LAYER_HEIGHT 46
+#define DATE_LAYER_HEIGHT 22
+// Nudges the group up slightly to compensate for the time font's line-height
+#define GROUP_VERTICAL_OFFSET -3
 #else
-  #define TIME_LAYER_HEIGHT 60
-  #define DATE_LAYER_HEIGHT 30
-  #define GROUP_VERTICAL_OFFSET -5
+#define TIME_LAYER_HEIGHT 60
+#define DATE_LAYER_HEIGHT 30
+#define GROUP_VERTICAL_OFFSET -5
 #endif
 
 static const GColor STRIPE_COLORS[] = {
@@ -154,14 +154,14 @@ static void main_window_load(Window *window)
 
 #ifdef DEVICE_IS_SMALL
   s_title_font = fonts_load_custom_font(
-                          resource_get_handle(RESOURCE_ID_MOUSEMEMOIRS_46));
+      resource_get_handle(RESOURCE_ID_MOUSEMEMOIRS_46));
   s_body_font = fonts_load_custom_font(
-                          resource_get_handle(RESOURCE_ID_TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_18));
+      resource_get_handle(RESOURCE_ID_TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_18));
 #else
   s_title_font = fonts_load_custom_font(
-                          resource_get_handle(RESOURCE_ID_MOUSEMEMOIRS_58));
+      resource_get_handle(RESOURCE_ID_MOUSEMEMOIRS_58));
   s_body_font = fonts_load_custom_font(
-                          resource_get_handle(RESOURCE_ID_TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_23));
+      resource_get_handle(RESOURCE_ID_TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_23));
 #endif
 
   // Create the striped background Layer
