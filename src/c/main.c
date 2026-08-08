@@ -2,9 +2,11 @@
 
 #define NUM_STRIPES 8
 #define ROUNDRECT_WIDTH 180
-#define ROUNDRECT_HEIGHT (ROUNDRECT_WIDTH * 10 / 16)
-#define ROUNDRECT_RADIUS_OUTER 15
-#define ROUNDRECT_RADIUS_INNER 10
+#define ROUNDRECT_SIZE_RATIO 0.7
+#define ROUNDRECT_HEIGHT (ROUNDRECT_WIDTH * ROUNDRECT_SIZE_RATIO)
+#define ROUNDRECT_RADIUS_OUTER 25
+#define ROUNDRECT_RADIUS_INNER 20
+#define ROUNDRECT_BORDER_WIDTH 20
 #define TIME_LAYER_HEIGHT 55
 #define DATE_LAYER_HEIGHT 30
 
@@ -75,10 +77,10 @@ static void background_update_proc(Layer *layer, GContext *ctx)
 
   // Draw a white roundrect on top of it
   GRect roundrect2_bounds = GRect(
-      bounds.origin.x + (bounds.size.w - (ROUNDRECT_WIDTH - 15)) / 2,
-      bounds.origin.y + (bounds.size.h - (ROUNDRECT_HEIGHT - 15)) / 2,
-      (ROUNDRECT_WIDTH - 15),
-      (ROUNDRECT_HEIGHT - 15));
+      bounds.origin.x + (bounds.size.w - (ROUNDRECT_WIDTH - ROUNDRECT_BORDER_WIDTH)) / 2,
+      bounds.origin.y + (bounds.size.h - (ROUNDRECT_HEIGHT - ROUNDRECT_BORDER_WIDTH)) / 2,
+      (ROUNDRECT_WIDTH - ROUNDRECT_BORDER_WIDTH),
+      (ROUNDRECT_HEIGHT - ROUNDRECT_BORDER_WIDTH));
   graphics_context_set_fill_color(ctx, GColorWhite);
   graphics_fill_rect(ctx, roundrect2_bounds, ROUNDRECT_RADIUS_INNER, GCornersAll);
 }
