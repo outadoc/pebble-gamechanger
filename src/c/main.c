@@ -5,7 +5,7 @@
 #define ROUNDRECT_HEIGHT (ROUNDRECT_WIDTH * 10 / 16)
 #define ROUNDRECT_RADIUS_OUTER 15
 #define ROUNDRECT_RADIUS_INNER 10
-#define TIME_LAYER_HEIGHT 50
+#define TIME_LAYER_HEIGHT 55
 #define DATE_LAYER_HEIGHT 30
 
 static const GColor STRIPE_COLORS[] = {
@@ -90,9 +90,9 @@ static void main_window_load(Window *window)
   GRect bounds = layer_get_bounds(window_layer);
 
   s_title_font = fonts_load_custom_font(
-                          resource_get_handle(RESOURCE_ID_TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_42));
+                          resource_get_handle(RESOURCE_ID_TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_52));
   s_body_font = fonts_load_custom_font(
-                          resource_get_handle(RESOURCE_ID_TRADE_GOTHIC_LT_STD_18));
+                          resource_get_handle(RESOURCE_ID_TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_23));
 
   // Create the striped background Layer
   s_background_layer = layer_create(bounds);
