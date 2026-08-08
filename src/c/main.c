@@ -5,6 +5,8 @@
 #define ROUNDRECT_HEIGHT (ROUNDRECT_WIDTH * 10 / 16)
 #define ROUNDRECT_RADIUS_OUTER 15
 #define ROUNDRECT_RADIUS_INNER 10
+#define TIME_LAYER_HEIGHT 50
+#define DATE_LAYER_HEIGHT 30
 
 static const GColor STRIPE_COLORS[] = {
     GColorRed,
@@ -96,9 +98,12 @@ static void main_window_load(Window *window)
   s_background_layer = layer_create(bounds);
   layer_set_update_proc(s_background_layer, background_update_proc);
 
+  // Center the time+date group as a whole, vertically, on the screen
+  int group_top = bounds.origin.y + (bounds.size.h - (TIME_LAYER_HEIGHT + DATE_LAYER_HEIGHT)) / 2;
+
   // Create the time TextLayer
   s_time_layer = text_layer_create(
-      GRect(0, PBL_IF_ROUND_ELSE(58, 52), bounds.size.w, 50));
+      GRect(0, group_top, bounds.size.w, TIME_LAYER_HEIGHT));
   text_layer_set_background_color(s_time_layer, GColorClear);
   text_layer_set_text_color(s_time_layer, GColorBlack);
   text_layer_set_font(s_time_layer, s_title_font);
@@ -106,7 +111,7 @@ static void main_window_load(Window *window)
 
   // Create the date TextLayer
   s_date_layer = text_layer_create(
-      GRect(0, PBL_IF_ROUND_ELSE(110, 104), bounds.size.w, 30));
+      GRect(0, group_top + TIME_LAYER_HEIGHT, bounds.size.w, DATE_LAYER_HEIGHT));
   text_layer_set_background_color(s_date_layer, GColorClear);
   text_layer_set_text_color(s_date_layer, GColorBlack);
   text_layer_set_font(s_date_layer, s_body_font);
