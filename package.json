@@ -1,12 +1,12 @@
 {
-    "author": "MakeAwesomeHappen",
+    "author": "outadoc",
     "dependencies": {},
     "keywords": [
         "pebble-app"
     ],
-    "name": "watchface-tutorial",
+    "name": "game-changer",
     "pebble": {
-        "displayName": "Tutorial Watchface",
+        "displayName": "Game Changer",
         "enableMultiJS": true,
         "messageKeys": [],
         "projectType": "native",
@@ -15,15 +15,12 @@
         },
         "sdkVersion": "3",
         "targetPlatforms": [
-            "aplite",
             "basalt",
             "chalk",
-            "diorite",
             "emery",
-            "flint",
             "gabbro"
         ],
-        "uuid": "3f4f11dc-8764-42f5-a6b0-964c1f26349e",
+        "uuid": "42fa75e1-8e37-4928-b584-15b1ad849d56",
         "watchapp": {
             "watchface": true
         }
