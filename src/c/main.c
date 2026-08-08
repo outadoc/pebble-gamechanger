@@ -1,8 +1,20 @@
 #include <pebble.h>
 
+#define NUM_STRIPES 8
+
+static const GColor STRIPE_COLORS[] = {
+    GColorRed,
+    GColorOrange,
+    GColorChromeYellow,
+    GColorPictonBlue,
+    GColorDarkCandyAppleRed,
+};
+static const int NUM_STRIPE_COLORS = sizeof(STRIPE_COLORS) / sizeof(STRIPE_COLORS[0]);
+
 static GFont s_title_font;
 static GFont s_body_font;
 static Window *s_main_window;
+static Layer *s_background_layer;
 static TextLayer *s_time_layer;
 static TextLayer *s_date_layer;
 
@@ -32,11 +44,30 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed)
   update_time();
 }
 
+static void background_update_proc(Layer *layer, GContext *ctx)
+{
+  GRect bounds = layer_get_bounds(layer);
+  int stripe_height = bounds.size.h / NUM_STRIPES;
+
+  for (int i = 0; i < NUM_STRIPES; i++)
+  {
+    // Make the last stripe absorb any leftover rounding pixels
+    int height = (i == NUM_STRIPES - 1) ? (bounds.size.h - stripe_height * i) : stripe_height;
+
+    graphics_context_set_fill_color(ctx, STRIPE_COLORS[i % NUM_STRIPE_COLORS]);
+    graphics_fill_rect(ctx, GRect(bounds.origin.x, bounds.origin.y + stripe_height * i, bounds.size.w, height), 0, GCornerNone);
+  }
+}
+
 static void main_window_load(Window *window)
 {
   // Get information about the Window
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
+
+  // Create the striped background Layer
+  s_background_layer = layer_create(bounds);
+  layer_set_update_proc(s_background_layer, background_update_proc);
 
   s_title_font = fonts_load_custom_font(
                           resource_get_handle(RESOURCE_ID_TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_42));
@@ -60,6 +91,7 @@ static void main_window_load(Window *window)
   text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
 
   // Add layers to the Window
+  layer_add_child(window_layer, s_background_layer);
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
   layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
 }
@@ -69,6 +101,9 @@ static void main_window_unload(Window *window)
   // Destroy TextLayers
   text_layer_destroy(s_time_layer);
   text_layer_destroy(s_date_layer);
+
+  // Destroy background Layer
+  layer_destroy(s_background_layer);
 }
 
 static void init()
