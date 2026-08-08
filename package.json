@@ -15,7 +15,7 @@
                 {
                     "characterRegex": "[0-9:. ]",
                     "file": "fonts/trade-gothic-lt-std-bold-condensed-no-20-5872def1d27d8.otf",
-                    "name": "TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_24",
+                    "name": "TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_42",
                     "targetPlatforms": null,
                     "type": "font"
                 },
