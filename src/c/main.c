@@ -65,14 +65,14 @@ static void main_window_load(Window *window)
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
-  // Create the striped background Layer
-  s_background_layer = layer_create(bounds);
-  layer_set_update_proc(s_background_layer, background_update_proc);
-
   s_title_font = fonts_load_custom_font(
                           resource_get_handle(RESOURCE_ID_TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_42));
   s_body_font = fonts_load_custom_font(
                           resource_get_handle(RESOURCE_ID_TRADE_GOTHIC_LT_STD_18));
+
+  // Create the striped background Layer
+  s_background_layer = layer_create(bounds);
+  layer_set_update_proc(s_background_layer, background_update_proc);
 
   // Create the time TextLayer
   s_time_layer = text_layer_create(
@@ -104,6 +104,9 @@ static void main_window_unload(Window *window)
 
   // Destroy background Layer
   layer_destroy(s_background_layer);
+
+  fonts_unload_custom_font(s_title_font);
+  fonts_unload_custom_font(s_body_font);
 }
 
 static void init()
