@@ -36,7 +36,8 @@
                     "file": "images/menu",
                     "name": "MENU_ICON",
                     "targetPlatforms": null,
-                    "type": "bitmap"
+                    "type": "bitmap",
+                    "menuIcon": true
                 },
                 {
                     "characterRegex": "[0-9:. ]",
