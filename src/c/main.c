@@ -1,4 +1,5 @@
 #include <pebble.h>
+#include <ctype.h>
 
 #define NUM_STRIPES 8
 #define ROUNDRECT_WIDTH 180
@@ -39,9 +40,13 @@ static void update_time()
   // Display this time on the TextLayer
   text_layer_set_text(s_time_layer, s_time_buffer);
 
-  // Write the current date into a buffer
+  // Write the current date into a buffer, in uppercase
   static char s_date_buffer[16];
   strftime(s_date_buffer, sizeof(s_date_buffer), "%a %b %d", tick_time);
+  for (char *c = s_date_buffer; *c != '\0'; c++)
+  {
+    *c = toupper((unsigned char)*c);
+  }
 
   // Display the date
   text_layer_set_text(s_date_layer, s_date_buffer);
