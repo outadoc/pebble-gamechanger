@@ -8,7 +8,7 @@
 #define ROUNDRECT_RADIUS_OUTER 25
 #define ROUNDRECT_RADIUS_INNER 20
 #define ROUNDRECT_BORDER_WIDTH 20
-#define TIME_LAYER_HEIGHT 55
+#define TIME_LAYER_HEIGHT 60
 #define DATE_LAYER_HEIGHT 30
 
 static const GColor STRIPE_COLORS[] = {
@@ -97,7 +97,7 @@ static void main_window_load(Window *window)
   GRect bounds = layer_get_bounds(window_layer);
 
   s_title_font = fonts_load_custom_font(
-                          resource_get_handle(RESOURCE_ID_TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_52));
+                          resource_get_handle(RESOURCE_ID_MOUSEMEMOIRS_58));
   s_body_font = fonts_load_custom_font(
                           resource_get_handle(RESOURCE_ID_TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_23));
 
@@ -106,7 +106,7 @@ static void main_window_load(Window *window)
   layer_set_update_proc(s_background_layer, background_update_proc);
 
   // Center the time+date group as a whole, vertically, on the screen
-  int group_top = bounds.origin.y + (bounds.size.h - (TIME_LAYER_HEIGHT + DATE_LAYER_HEIGHT)) / 2;
+  int group_top = bounds.origin.y + (bounds.size.h - (TIME_LAYER_HEIGHT + DATE_LAYER_HEIGHT)) / 2 - 5;
 
   // Create the time TextLayer
   s_time_layer = text_layer_create(
