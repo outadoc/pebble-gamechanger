@@ -16,14 +16,28 @@
                     "characterRegex": "[0-9:APM ]",
                     "file": "fonts/MouseMemoirs-Regular.ttf",
                     "name": "MOUSEMEMOIRS_58",
-                    "targetPlatforms": null,
+                    "targetPlatforms": ["emery", "gabbro"],
+                    "type": "font"
+                },
+                {
+                    "characterRegex": "[0-9:APM ]",
+                    "file": "fonts/MouseMemoirs-Regular.ttf",
+                    "name": "MOUSEMEMOIRS_46",
+                    "targetPlatforms": ["basalt", "chalk"],
                     "type": "font"
                 },
                 {
                     "characterRegex": null,
                     "file": "fonts/trade-gothic-lt-std-bold-condensed-no-20-5872def1d27d8.otf",
                     "name": "TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_23",
-                    "targetPlatforms": null,
+                    "targetPlatforms": ["emery", "gabbro"],
+                    "type": "font"
+                },
+                {
+                    "characterRegex": null,
+                    "file": "fonts/trade-gothic-lt-std-bold-condensed-no-20-5872def1d27d8.otf",
+                    "name": "TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_18",
+                    "targetPlatforms": ["basalt", "chalk"],
                     "type": "font"
                 }
             ]
