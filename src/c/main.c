@@ -30,6 +30,7 @@ static const int NUM_STRIPE_COLORS = sizeof(STRIPE_COLORS) / sizeof(STRIPE_COLOR
 static GFont s_title_font;
 static GFont s_body_font;
 static Window *s_main_window;
+static Layer *s_window_layer;
 static Layer *s_background_layer;
 static TextLayer *s_time_layer;
 static TextLayer *s_date_layer;
@@ -75,6 +76,7 @@ static GRect rect_centered_in(GRect bounds, int width, int height)
 
 static void background_update_proc(Layer *layer, GContext *ctx)
 {
+  // Stripes must always fill the whole window, not just the unobstructed area
   GRect bounds = layer_get_bounds(layer);
   int stripe_height = bounds.size.h / NUM_STRIPES;
 
@@ -87,18 +89,39 @@ static void background_update_proc(Layer *layer, GContext *ctx)
     graphics_fill_rect(ctx, GRect(bounds.origin.x, bounds.origin.y + stripe_height * i, bounds.size.w, height), 0, GCornerNone);
   }
 
-  // Draw a black roundrect centered on the screen
-  GRect roundrect_bounds = rect_centered_in(bounds, ROUNDRECT_WIDTH, ROUNDRECT_HEIGHT);
+  // The roundrect content, on the other hand, should shift within the unobstructed area
+  GRect unobstructed_bounds = layer_get_unobstructed_bounds(layer);
+
+  // Draw a black roundrect centered on the unobstructed area
+  GRect roundrect_bounds = rect_centered_in(unobstructed_bounds, ROUNDRECT_WIDTH, ROUNDRECT_HEIGHT);
   graphics_context_set_fill_color(ctx, GColorBlack);
   graphics_fill_rect(ctx, roundrect_bounds, ROUNDRECT_RADIUS_OUTER, GCornersAll);
 
   // Draw a white roundrect on top of it
   GRect roundrect2_bounds = rect_centered_in(
-      bounds,
+      unobstructed_bounds,
       ROUNDRECT_WIDTH - ROUNDRECT_BORDER_WIDTH,
       ROUNDRECT_HEIGHT - ROUNDRECT_BORDER_WIDTH);
   graphics_context_set_fill_color(ctx, GColorWhite);
   graphics_fill_rect(ctx, roundrect2_bounds, ROUNDRECT_RADIUS_INNER, GCornersAll);
+}
+
+// Positions the time+date group, centered as a whole, within the given bounds
+static void layout_time_date_layers(GRect bounds)
+{
+  int group_top = bounds.origin.y + (bounds.size.h - (TIME_LAYER_HEIGHT + DATE_LAYER_HEIGHT)) / 2 + GROUP_VERTICAL_OFFSET;
+
+  layer_set_frame(text_layer_get_layer(s_time_layer), GRect(0, group_top, bounds.size.w, TIME_LAYER_HEIGHT));
+  layer_set_frame(text_layer_get_layer(s_date_layer), GRect(0, group_top + TIME_LAYER_HEIGHT, bounds.size.w, DATE_LAYER_HEIGHT));
+}
+
+static void unobstructed_area_change_handler(AnimationProgress progress, void *context)
+{
+  // Redraw the background so the roundrect tracks the animated unobstructed area
+  layer_mark_dirty(s_background_layer);
+
+  // Re-run layout every frame of the animation so the time+date group shifts smoothly
+  layout_time_date_layers(layer_get_unobstructed_bounds(s_window_layer));
 }
 
 static void main_window_load(Window *window)
@@ -106,6 +129,7 @@ static void main_window_load(Window *window)
   // Get information about the Window
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
+  s_window_layer = window_layer;
 
   s_title_font = fonts_load_custom_font(
                           resource_get_handle(RESOURCE_ID_MOUSEMEMOIRS_58));
@@ -116,33 +140,39 @@ static void main_window_load(Window *window)
   s_background_layer = layer_create(bounds);
   layer_set_update_proc(s_background_layer, background_update_proc);
 
-  // Center the time+date group as a whole, vertically, on the screen
-  int group_top = bounds.origin.y + (bounds.size.h - (TIME_LAYER_HEIGHT + DATE_LAYER_HEIGHT)) / 2 + GROUP_VERTICAL_OFFSET;
-
   // Create the time TextLayer
-  s_time_layer = text_layer_create(
-      GRect(0, group_top, bounds.size.w, TIME_LAYER_HEIGHT));
+  s_time_layer = text_layer_create(GRectZero);
   text_layer_set_background_color(s_time_layer, GColorClear);
   text_layer_set_text_color(s_time_layer, GColorBlack);
   text_layer_set_font(s_time_layer, s_title_font);
   text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
 
   // Create the date TextLayer
-  s_date_layer = text_layer_create(
-      GRect(0, group_top + TIME_LAYER_HEIGHT, bounds.size.w, DATE_LAYER_HEIGHT));
+  s_date_layer = text_layer_create(GRectZero);
   text_layer_set_background_color(s_date_layer, GColorClear);
   text_layer_set_text_color(s_date_layer, GColorBlack);
   text_layer_set_font(s_date_layer, s_body_font);
   text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
 
+  // Center the time+date group as a whole within whatever area is unobstructed right now
+  layout_time_date_layers(layer_get_unobstructed_bounds(window_layer));
+
   // Add layers to the Window
   layer_add_child(window_layer, s_background_layer);
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
   layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
+
+  // Keep the content centered as the Timeline Quick View obstruction appears/disappears
+  UnobstructedAreaHandlers unobstructed_handlers = {
+      .change = unobstructed_area_change_handler,
+  };
+  unobstructed_area_service_subscribe(unobstructed_handlers, NULL);
 }
 
 static void main_window_unload(Window *window)
 {
+  unobstructed_area_service_unsubscribe();
+
   // Destroy TextLayers
   text_layer_destroy(s_time_layer);
   text_layer_destroy(s_date_layer);
