@@ -18,6 +18,13 @@
                     "name": "TRADE_GOTHIC_LT_STD_BOLD_CONDENSED_24",
                     "targetPlatforms": null,
                     "type": "font"
+                },
+                {
+                    "characterRegex": null,
+                    "file": "fonts/trade-gothic-lt-std-58a78e64434a9.otf",
+                    "name": "TRADE_GOTHIC_LT_STD_18",
+                    "targetPlatforms": null,
+                    "type": "font"
                 }
             ]
         },
