@@ -1,15 +1,22 @@
 #include <pebble.h>
 #include <ctype.h>
 
+// Striped background
 #define NUM_STRIPES 8
+
+// Roundrect frame (centered on screen, width drives height via a fixed aspect ratio)
 #define ROUNDRECT_WIDTH 180
 #define ROUNDRECT_SIZE_RATIO 0.7
 #define ROUNDRECT_HEIGHT (ROUNDRECT_WIDTH * ROUNDRECT_SIZE_RATIO)
 #define ROUNDRECT_RADIUS_OUTER 25
 #define ROUNDRECT_RADIUS_INNER 20
 #define ROUNDRECT_BORDER_WIDTH 20
+
+// Time + date text layers (centered as a group)
 #define TIME_LAYER_HEIGHT 60
 #define DATE_LAYER_HEIGHT 30
+// Nudges the group up slightly to compensate for the time font's line-height
+#define GROUP_VERTICAL_OFFSET -5
 
 static const GColor STRIPE_COLORS[] = {
     GColorRed,
@@ -57,6 +64,15 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed)
   update_time();
 }
 
+static GRect rect_centered_in(GRect bounds, int width, int height)
+{
+  return GRect(
+      bounds.origin.x + (bounds.size.w - width) / 2,
+      bounds.origin.y + (bounds.size.h - height) / 2,
+      width,
+      height);
+}
+
 static void background_update_proc(Layer *layer, GContext *ctx)
 {
   GRect bounds = layer_get_bounds(layer);
@@ -72,20 +88,15 @@ static void background_update_proc(Layer *layer, GContext *ctx)
   }
 
   // Draw a black roundrect centered on the screen
-  GRect roundrect_bounds = GRect(
-      bounds.origin.x + (bounds.size.w - ROUNDRECT_WIDTH) / 2,
-      bounds.origin.y + (bounds.size.h - ROUNDRECT_HEIGHT) / 2,
-      ROUNDRECT_WIDTH,
-      ROUNDRECT_HEIGHT);
+  GRect roundrect_bounds = rect_centered_in(bounds, ROUNDRECT_WIDTH, ROUNDRECT_HEIGHT);
   graphics_context_set_fill_color(ctx, GColorBlack);
   graphics_fill_rect(ctx, roundrect_bounds, ROUNDRECT_RADIUS_OUTER, GCornersAll);
 
   // Draw a white roundrect on top of it
-  GRect roundrect2_bounds = GRect(
-      bounds.origin.x + (bounds.size.w - (ROUNDRECT_WIDTH - ROUNDRECT_BORDER_WIDTH)) / 2,
-      bounds.origin.y + (bounds.size.h - (ROUNDRECT_HEIGHT - ROUNDRECT_BORDER_WIDTH)) / 2,
-      (ROUNDRECT_WIDTH - ROUNDRECT_BORDER_WIDTH),
-      (ROUNDRECT_HEIGHT - ROUNDRECT_BORDER_WIDTH));
+  GRect roundrect2_bounds = rect_centered_in(
+      bounds,
+      ROUNDRECT_WIDTH - ROUNDRECT_BORDER_WIDTH,
+      ROUNDRECT_HEIGHT - ROUNDRECT_BORDER_WIDTH);
   graphics_context_set_fill_color(ctx, GColorWhite);
   graphics_fill_rect(ctx, roundrect2_bounds, ROUNDRECT_RADIUS_INNER, GCornersAll);
 }
@@ -106,7 +117,7 @@ static void main_window_load(Window *window)
   layer_set_update_proc(s_background_layer, background_update_proc);
 
   // Center the time+date group as a whole, vertically, on the screen
-  int group_top = bounds.origin.y + (bounds.size.h - (TIME_LAYER_HEIGHT + DATE_LAYER_HEIGHT)) / 2 - 5;
+  int group_top = bounds.origin.y + (bounds.size.h - (TIME_LAYER_HEIGHT + DATE_LAYER_HEIGHT)) / 2 + GROUP_VERTICAL_OFFSET;
 
   // Create the time TextLayer
   s_time_layer = text_layer_create(
